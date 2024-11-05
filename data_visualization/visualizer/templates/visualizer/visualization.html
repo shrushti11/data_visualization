@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualizations</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'visualizer/styles.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Data Visualization with Matplotlib and Seaborn</h1>
+        
+        <label for="day-select">Select Day:</label>
+        <select id="day-select" name="day" onchange="updateGraphs()">
+            {% for day in days_of_week %}
+                <option value="{{ day }}" {% if selected_day == day %}selected{% endif %}>{{ day }}</option>
+            {% endfor %}
+        </select>
+        <div class="graph-container">
+        {% if data_available %}
+        <div class="graph">
+            <h2>Bar Plot</h2>
+            <img src="data:image/png;base64,{{ bar_plot }}" alt="Bar Plot">
+        </div>
+        <div class="graph">
+            <h2>Scatter Plot</h2>
+            <img src="data:image/png;base64,{{ scatter_plot }}" alt="Scatter Plot">
+        </div>
+        {% else %}
+            <h2>No Data Available</h2>
+            <p>There are no entries for {{ selected_day }} in the dataset.</p>
+        {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function updateGraphs() {
+            const selectedDay = document.getElementById('day-select').value;
+            window.location.href = `?day=${selectedDay}`;
+        }
+    </script>
+</body>
+</html>
